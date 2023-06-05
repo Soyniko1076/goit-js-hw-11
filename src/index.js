@@ -1,17 +1,17 @@
+
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '37053525-954bf5b1abb6340838a01bbc5';
 
 function fetchEvents(keyword) {
-  const params = new URLSearchParams({
+  const parameters = new URLSearchParams({
     key: API_KEY,
     q: keyword,
-    // image_type: photo,
-    // orientation: horizontal,
-    // safesearch: true,
+    image_type: photo,
+    orientation: horizontal,
+    safesearch: true,
   });
 
-  fetch(`${BASE_URL}?${params}`)
-    .then(response => {
+    return fetch(`${BASE_URL}?${parameters}`).then(response => {
       if (!response.ok) {
         throw new Error(response.status);
       }
@@ -19,5 +19,10 @@ function fetchEvents(keyword) {
     })
     .catch(error => console.log(error));
 }
+fetchEvents('dog')
 
-fetchEvents('cat')
+// function getEvents(query) {
+//     fetchEvents(query).then(data => console.log (data))
+// }
+
+// getEvents('dog')
