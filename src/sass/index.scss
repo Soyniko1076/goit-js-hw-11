@@ -1,7 +1,6 @@
 @import './common';
 @import './example';
 
-
 .loader {
   width: 48px;
   height: 48px;
@@ -9,12 +8,12 @@
   display: inline-block;
   position: relative;
   border: 3px solid;
-  border-color: #FFF #FFF transparent;
+  border-color: #fff #fff transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
 .loader::after {
-  content: '';  
+  content: '';
   box-sizing: border-box;
   position: absolute;
   left: 0;
@@ -23,7 +22,7 @@
   bottom: 0;
   margin: auto;
   border: 3px solid;
-  border-color: transparent #FF3D00 #FF3D00;
+  border-color: transparent #ff3d00 #ff3d00;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -38,8 +37,8 @@
   100% {
     transform: rotate(360deg);
   }
-} 
-    
+}
+
 @keyframes rotationBack {
   0% {
     transform: rotate(0deg);
@@ -48,13 +47,57 @@
     transform: rotate(-360deg);
   }
 }
-    
 
 .unvisible {
-    display: none;
+  display: none;
 }
 
-.container {
-    background-color: #fff2f2;
-    padding: 20px;
+.body {
+  background-color: #f5b8ec;
+}
+
+.header {
+  background-color: #3239cf;
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.shadow6
+{
+    position:relative;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 0, 0, 0.1) inset;
+}
+.shadow6:before, .shadow6:after
+{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    top: 10px;
+    bottom: 0;
+    left: 30px;
+    right: 30px;
+    border-radius:30%;
+}
+
+
+
+
+
+
+
+
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
 }

@@ -9,9 +9,13 @@ const refs = {
   button: document.querySelector('.load-more'),
 };
 
-function getEvents(query) {
-  fetchEvents(query)
+let pageToFetch = 1;
+let queryToFetch = '';
+
+function getEvents(query, page) {
+  fetchEvents(query, page)
     .then(data => {
+      Notify.success('Hooray! We found 500 images');
       const events = data.hits;
       console.log(events);
       renderEvents(events);
@@ -23,8 +27,6 @@ function getEvents(query) {
       );
     });
 }
-
-getEvents('human');
 
 function renderEvents(events) {
   const marcup = events
@@ -38,9 +40,17 @@ function renderEvents(events) {
         comments,
         downloads,
       }) => {
-        return `<div class="photo-card"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"><div class="info"><p class="info-item"><b>${likes}</b></p><p class="info-item"><b>${views}</b></p><p class="info-item"><b>${comments}</b></p><p class="info-item"><b>${downloads}</b></p></div></div>`;
+        return `<div class="photo-card"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="330" height="230"><div class="info"><p class="info-item"><b>${likes}</b></p><p class="info-item"><b>${views}</b></p><p class="info-item"><b>${comments}</b></p><p class="info-item"><b>${downloads}</b></p></div></div>`;
       }
     )
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', marcup);
+}
+
+refs.form.addEventListener('submit', handleSubmit);
+
+function handleSubmit(event) {
+  event.preventDefault();
+  queryToFetch = event.target.elements.searchQuery.value;
+  getEvents(queryToFetch, pageToFetch);
 }
