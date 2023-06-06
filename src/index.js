@@ -1,28 +1,39 @@
+import { fetchEvents } from './object-api.js';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '37053525-954bf5b1abb6340838a01bbc5';
+const input = document.querySelector('.input');
+const list = document.querySelector('.list');
 
-function fetchEvents(keyword) {
-  const parameters = new URLSearchParams({
-    key: API_KEY,
-    q: keyword,
-    image_type: photo,
-    orientation: horizontal,
-    safesearch: true,
-  });
-
-    return fetch(`${BASE_URL}?${parameters}`).then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
+function getEvents(query) {
+  fetchEvents(query)
+    .then(data => {
+      const events = data.hits;
+      console.log(events);
+      renderEvents(events);
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    });
 }
-fetchEvents('dog')
 
-// function getEvents(query) {
-//     fetchEvents(query).then(data => console.log (data))
-// }
+getEvents('cat');
 
-// getEvents('dog')
+function renderEvents(events) {
+  const marcup = events
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<li class="wrapper"><img src="${webformatURL}" alt="${tags}" width="300"><p>${likes}</p><p>${views}</p><p>${comments}</p><p>${downloads}</p></li>`;
+      }
+    )
+    .join('');
+  list.insertAdjacentHTML('beforeend', marcup);
+}
