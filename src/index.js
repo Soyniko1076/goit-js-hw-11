@@ -1,8 +1,11 @@
 import { fetchEvents } from './object-api.js';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const input = document.querySelector('.input');
-const list = document.querySelector('.list');
+const refs = {
+  list: document.querySelector('.list'),
+  input: document.querySelector('.input'),
+  loader: document.querySelector('.loader'),
+};
 
 function getEvents(query) {
   fetchEvents(query)
@@ -13,7 +16,9 @@ function getEvents(query) {
     })
     .catch(error => {
       console.log(error);
-      Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
     });
 }
 
@@ -35,5 +40,5 @@ function renderEvents(events) {
       }
     )
     .join('');
-  list.insertAdjacentHTML('beforeend', marcup);
+  refs.list.insertAdjacentHTML('beforeend', marcup);
 }
