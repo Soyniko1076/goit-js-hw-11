@@ -2,9 +2,11 @@ import { fetchEvents } from './object-api.js';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs = {
-  list: document.querySelector('.list'),
+  gallery: document.querySelector('.gallery'),
   input: document.querySelector('.input'),
   loader: document.querySelector('.loader'),
+  form: document.querySelector('.search-form'),
+  button: document.querySelector('.load-more'),
 };
 
 function getEvents(query) {
@@ -22,7 +24,7 @@ function getEvents(query) {
     });
 }
 
-getEvents('cat');
+getEvents('human');
 
 function renderEvents(events) {
   const marcup = events
@@ -36,9 +38,9 @@ function renderEvents(events) {
         comments,
         downloads,
       }) => {
-        return `<li class="wrapper"><img src="${webformatURL}" alt="${tags}" width="300"><p>${likes}</p><p>${views}</p><p>${comments}</p><p>${downloads}</p></li>`;
+        return `<div class="photo-card"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"><div class="info"><p class="info-item"><b>${likes}</b></p><p class="info-item"><b>${views}</b></p><p class="info-item"><b>${comments}</b></p><p class="info-item"><b>${downloads}</b></p></div></div>`;
       }
     )
     .join('');
-  refs.list.insertAdjacentHTML('beforeend', marcup);
+  refs.gallery.insertAdjacentHTML('beforeend', marcup);
 }
