@@ -41,7 +41,7 @@ function renderEvents(events) {
         comments,
         downloads,
       }) => {
-        return `<div class="photo-card"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" width="330" height="230"><ul class="info"><li><p class="info-item">Likes</p><b>${likes}</b></li><li><p class="info-item">Views</p><b>${views}</b></li><li><p class="info-item"><b>Comments${comments}</b></p></li><li><p class="info-item"><b>Downloads${downloads}</b></p></li></ul></div>`;
+        return `<div class="photo-card  shadow6"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" width="330" height="230"><ul class="info"><li class="item"><p class="info-item">Likes</p><p class="descrip">${likes}</p></li><li class="item"><p class="info-item">Views</p><p class="descrip">${views}</p></li><li class="item"><p class="info-item">Comments</p><p class="descrip">${comments}</p></li><li class="item"><p class="info-item">Downloads</p><p class="descrip">${downloads}</p></li></ul></div>`;
       }
     )
     .join('');
@@ -53,5 +53,12 @@ refs.form.addEventListener('submit', handleSubmit);
 function handleSubmit(event) {
   event.preventDefault();
   queryToFetch = event.target.elements.searchQuery.value;
+  getEvents(queryToFetch, pageToFetch);
+}
+
+refs.button.addEventListener('click', hendlLoadMore)
+
+function hendlLoadMore() {
+  pageToFetch += 1;
   getEvents(queryToFetch, pageToFetch);
 }
