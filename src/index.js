@@ -19,7 +19,7 @@ function getEvents(query, page) {
       const events = data.hits;
       console.log(events);
       renderEvents(events);
-      refs.button.classList.remove('unvisible')
+      refs.button.classList.remove('unvisible');
     })
     .catch(error => {
       console.log(error);
@@ -41,7 +41,7 @@ function renderEvents(events) {
         comments,
         downloads,
       }) => {
-        return `<div class="photo-card"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" width="330" height="230"><div class="info"><p class="info-item"><b>${likes}</b></p><p class="info-item"><b>${views}</b></p><p class="info-item"><b>${comments}</b></p><p class="info-item"><b>${downloads}</b></p></div></div>`;
+        return `<div class="photo-card"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" width="330" height="230"><ul class="info"><li><p class="info-item">Likes</p><b>${likes}</b></li><li><p class="info-item">Views</p><b>${views}</b></li><li><p class="info-item"><b>Comments${comments}</b></p></li><li><p class="info-item"><b>Downloads${downloads}</b></p></li></ul></div>`;
       }
     )
     .join('');
