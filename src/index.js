@@ -7,6 +7,7 @@ const refs = {
   loader: document.querySelector('.loader'),
   form: document.querySelector('.search-form'),
   button: document.querySelector('.load-more'),
+  list:document.querySelector('.info')
 };
 
 let pageToFetch = 1;
@@ -53,10 +54,12 @@ refs.form.addEventListener('submit', handleSubmit);
 function handleSubmit(event) {
   event.preventDefault();
   queryToFetch = event.target.elements.searchQuery.value;
+  pageToFetch = 1;
+  refs.gallery.innerHTML = '';
   getEvents(queryToFetch, pageToFetch);
 }
 
-refs.button.addEventListener('click', hendlLoadMore)
+refs.button.addEventListener('click', hendlLoadMore);
 
 function hendlLoadMore() {
   pageToFetch += 1;
