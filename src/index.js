@@ -36,13 +36,10 @@ function fetchEvents(keyword) {
 function getEvents(query, page) {
   fetchEvents(query, page)
     .then(data => {
-      console.log(data);
       if (data.totalHits !== 0) {
         Notify.success('Hooray! We found 500 images');
         const events = data.hits;
-        console.log(events);
         renderEvents(events);
-
         refs.button.classList.remove('unvisible');
       } else {
         Notify.failure(
@@ -62,7 +59,6 @@ function getEvents(query, page) {
 function loadEvents(query, page) {
   fetchEvents(query, page)
     .then(data => {
-      console.log(data);
       if (data.totalHits !== 0) {
         const events = data.hits;
         console.log(events);
