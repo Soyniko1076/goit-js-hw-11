@@ -7,15 +7,25 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   gallery: document.querySelector('.gallery'),
-  input: document.querySelector('.input'),
   form: document.querySelector('.search-form'),
-  button: document.querySelector('.load-more'),
+  guard: document.querySelector('.guard'),
 };
 
-const lightbox = new SimpleLightbox('.gallery a')
+const lightbox = new SimpleLightbox('.gallery a');
 
 let pageToFetch = 1;
 let queryToFetch = '';
+
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        getEvents(queryToFetch, pageToFetch);
+      }
+    });
+  },
+  { rootMargin: '200px' }
+);
 
 function fetchEvents(keyword) {
   return fetch(
@@ -40,42 +50,17 @@ function getEvents(query, page) {
         const events = data.hits;
         renderEvents(events);
         lightbox.refresh();
-        refs.button.classList.remove('unvisible');
+        observer.observe(refs.guard);
       } else {
         Notify.failure(
           `Sorry, there are no images matching your search query "${query}". Please try another query.`
         );
-        refs.button.classList.add('unvisible');
       }
     })
     .catch(error => {
       console.log(error);
       Notify.failure(
         `Sorry, there are no images matching your search query. Please try again in 5 minutes`
-      );
-    });
-}
-
-function loadEvents(query, page) {
-  fetchEvents(query, page)
-    .then(data => {
-      if (data.totalHits !== 0) {
-        const events = data.hits;
-        console.log(events);
-        renderEvents(events);
-        lightbox.refresh()
-        refs.button.classList.remove('unvisible');
-      } else {
-        Notify.failure(
-          `Sorry, there are no images matching your search query "${query}". Please try another query.`
-        );
-        refs.button.classList.add('unvisible');
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      Notify.failure(
-        `Sorry, there are no images matching your search query. Please try again later`
       );
     });
 }
@@ -120,13 +105,6 @@ function handleSubmit(event) {
   queryToFetch = inputValue;
   pageToFetch = 1;
   refs.gallery.innerHTML = '';
-  refs.button.classList.add('unvisible');
+
   getEvents(queryToFetch, pageToFetch);
-}
-
-refs.button.addEventListener('click', hendlLoadMore);
-
-function hendlLoadMore() {
-  pageToFetch += 1;
-  loadEvents(queryToFetch, pageToFetch);
 }
