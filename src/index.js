@@ -8,12 +8,11 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const refs = {
   gallery: document.querySelector('.gallery'),
   input: document.querySelector('.input'),
-  loader: document.querySelector('.loader'),
   form: document.querySelector('.search-form'),
   button: document.querySelector('.load-more'),
 };
 
-const lightbox = new SimpleLightbox('.gallery a').refresh();
+const lightbox = new SimpleLightbox('.gallery a')
 
 let pageToFetch = 1;
 let queryToFetch = '';
@@ -40,10 +39,11 @@ function getEvents(query, page) {
         Notify.success('Hooray! We found 500 images');
         const events = data.hits;
         renderEvents(events);
+        lightbox.refresh();
         refs.button.classList.remove('unvisible');
       } else {
         Notify.failure(
-          `Sorry, there are no images matching your search query "${query}". Please try again.`
+          `Sorry, there are no images matching your search query "${query}". Please try another query.`
         );
         refs.button.classList.add('unvisible');
       }
@@ -51,7 +51,7 @@ function getEvents(query, page) {
     .catch(error => {
       console.log(error);
       Notify.failure(
-        `Sorry, there are no images matching your search query. Please try again later`
+        `Sorry, there are no images matching your search query. Please try again in 5 minutes`
       );
     });
 }
@@ -63,11 +63,11 @@ function loadEvents(query, page) {
         const events = data.hits;
         console.log(events);
         renderEvents(events);
-        // lightbox.refresh()
+        lightbox.refresh()
         refs.button.classList.remove('unvisible');
       } else {
         Notify.failure(
-          `Sorry, there are no images matching your search query "${query}". Please try again.`
+          `Sorry, there are no images matching your search query "${query}". Please try another query.`
         );
         refs.button.classList.add('unvisible');
       }
