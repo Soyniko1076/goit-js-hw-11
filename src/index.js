@@ -13,7 +13,7 @@ const refs = {
 
 const lightbox = new SimpleLightbox('.gallery a');
 
-let pageToFetch = 1;
+let pageToFetch;
 let queryToFetch = '';
 
 const observer = new IntersectionObserver(
@@ -46,11 +46,18 @@ function getEvents(query, page) {
   fetchEvents(query, page)
     .then(data => {
       if (data.totalHits !== 0) {
-        Notify.success('Hooray! We found 500 images');
-        const events = data.hits;
-        renderEvents(events);
-        lightbox.refresh();
-        observer.observe(refs.guard);
+        if (page === pageToFetch) {
+          Notify.success('Hooray! We found 500 images');
+          const events = data.hits;
+          renderEvents(events);
+          lightbox.refresh();
+          observer.observe(refs.guard);
+        } else {
+          const events = data.hits;
+          renderEvents(events);
+          lightbox.refresh();
+          observer.observe(refs.guard);
+        }
       } else {
         Notify.failure(
           `Sorry, there are no images matching your search query "${query}". Please try another query.`
