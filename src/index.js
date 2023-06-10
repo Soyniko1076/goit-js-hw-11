@@ -29,7 +29,7 @@ const observer = new IntersectionObserver(
 
 function fetchEvents(keyword) {
   return fetch(
-    `${BASE_URL}?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40`
+    `${BASE_URL}?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`
   )
     .then(response => {
       if (!response.ok) {
@@ -45,19 +45,16 @@ function fetchEvents(keyword) {
 function getEvents(query, page) {
   fetchEvents(query, page)
     .then(data => {
+      console.log(page);
+      if (page === 1) {
+        Notify.success('Hooray! We found 500 images');
+      }
       if (data.totalHits !== 0) {
-        if (page === pageToFetch) {
-          Notify.success('Hooray! We found 500 images');
-          const events = data.hits;
-          renderEvents(events);
-          lightbox.refresh();
-          observer.observe(refs.guard);
-        } else {
-          const events = data.hits;
-          renderEvents(events);
-          lightbox.refresh();
-          observer.observe(refs.guard);
-        }
+        const events = data.hits;
+        renderEvents(events);
+        lightbox.refresh();
+        observer.observe(refs.guard);
+        pageToFetch += 1;
       } else {
         Notify.failure(
           `Sorry, there are no images matching your search query "${query}". Please try another query.`
@@ -90,15 +87,6 @@ function renderEvents(events) {
     .join('');
 
   refs.gallery.insertAdjacentHTML('beforeend', marcup);
-
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 0.5,
-    behavior: 'smooth',
-  });
 }
 
 refs.form.addEventListener('submit', handleSubmit);
