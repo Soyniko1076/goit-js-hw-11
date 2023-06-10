@@ -1,9 +1,10 @@
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '37053525-954bf5b1abb6340838a01bbc5';
-
+import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+axios.defaults.baseURL = 'https://pixabay.com/';
+const API_KEY = '37053525-954bf5b1abb6340838a01bbc5';
 
 const refs = {
   gallery: document.querySelector('.gallery'),
@@ -13,7 +14,7 @@ const refs = {
 
 const lightbox = new SimpleLightbox('.gallery a');
 
-let pageToFetch;
+let pageToFetch = 1;
 let queryToFetch = '';
 
 const observer = new IntersectionObserver(
@@ -27,46 +28,37 @@ const observer = new IntersectionObserver(
   { rootMargin: '200px' }
 );
 
-function fetchEvents(keyword) {
-  return fetch(
-    `${BASE_URL}?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`
-  )
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    })
-    .catch(error => {
-      console.log(error);
-    });
+async function fetchEvents(keyword, page) {
+  try {
+    const { data } = await axios(
+      `api/?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&$page=${page}`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again in 5 minutes`
+    );
+  }
 }
 
-function getEvents(query, page) {
-  fetchEvents(query, page)
-    .then(data => {
-      console.log(page);
-      if (page === 1) {
-        Notify.success('Hooray! We found 500 images');
-      }
-      if (data.totalHits !== 0) {
-        const events = data.hits;
-        renderEvents(events);
-        lightbox.refresh();
-        observer.observe(refs.guard);
-        pageToFetch += 1;
-      } else {
-        Notify.failure(
-          `Sorry, there are no images matching your search query "${query}". Please try another query.`
-        );
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      Notify.failure(
-        `Sorry, there are no images matching your search query. Please try again in 5 minutes`
-      );
-    });
+async function getEvents(query, page) {
+  const data = await fetchEvents(query, page);
+  console.log(page);
+  if (data.totalHits !== 0) {
+    if (page === 1) {
+      Notify.success('Hooray! We found 500 images');
+    }
+    const events = data.hits;
+    renderEvents(events);
+    lightbox.refresh();
+    observer.observe(refs.guard);
+    pageToFetch += 1;
+  } else {
+    Notify.failure(
+      `Sorry, there are no images matching your search query "${query}". Please try another query.`
+    );
+  }
 }
 
 function renderEvents(events) {
@@ -100,6 +92,5 @@ function handleSubmit(event) {
   queryToFetch = inputValue;
   pageToFetch = 1;
   refs.gallery.innerHTML = '';
-
   getEvents(queryToFetch, pageToFetch);
 }
