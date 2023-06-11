@@ -41,7 +41,6 @@ async function fetchEvents(keyword, page) {
 
 async function getEvents(query, page) {
   const data = await fetchEvents(query, page);
-  console.log(page);
   if (data.totalHits !== 0) {
     if (page === 1) {
       Notify.success('Hooray! We found 500 images');
