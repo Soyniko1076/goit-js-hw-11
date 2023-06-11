@@ -43,7 +43,7 @@ async function getEvents(query, page) {
   const data = await fetchEvents(query, page);
   if (data.totalHits !== 0) {
     if (page === 1) {
-      Notify.success('Hooray! We found 500 images');
+      Notify.success(`Hooray! We found ${data.totalHits} images`);
     }
     const events = data.hits;
     renderEvents(events);
