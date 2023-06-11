@@ -31,7 +31,7 @@ const observer = new IntersectionObserver(
 async function fetchEvents(keyword, page) {
   try {
     const { data } = await axios(
-      `api/?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&$page=${page}`
+      `api/?key=${API_KEY}&q=${keyword}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
     return data;
   } catch (error) {
@@ -53,7 +53,7 @@ async function getEvents(query, page) {
     renderEvents(events);
     lightbox.refresh();
     observer.observe(refs.guard);
-    pageToFetch += 1;
+    page = pageToFetch += 1;
   } else {
     Notify.failure(
       `Sorry, there are no images matching your search query "${query}". Please try another query.`
@@ -92,5 +92,6 @@ function handleSubmit(event) {
   queryToFetch = inputValue;
   pageToFetch = 1;
   refs.gallery.innerHTML = '';
+  observer.unobserve(refs.guard);
   getEvents(queryToFetch, pageToFetch);
 }
