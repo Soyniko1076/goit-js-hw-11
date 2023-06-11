@@ -36,9 +36,6 @@ async function fetchEvents(keyword, page) {
     return data;
   } catch (error) {
     console.log(error);
-    Notify.failure(
-      `Sorry, there are no images matching your search query. Please try again in 5 minutes`
-    );
   }
 }
 
@@ -56,7 +53,8 @@ async function getEvents(query, page) {
     page = pageToFetch += 1;
   } else {
     Notify.failure(
-      `Sorry, there are no images matching your search query "${query}". Please try another query.`
+      `Sorry, there are no images matching your search query "${query}". 
+    Please try again.`
     );
   }
 }
