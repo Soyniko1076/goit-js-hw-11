@@ -14,6 +14,7 @@ const refs = {
 
 const lightbox = new SimpleLightbox('.gallery a');
 
+const imgPerPage = 40;
 let pageToFetch = 1;
 let queryToFetch = '';
 
@@ -41,6 +42,7 @@ async function fetchEvents(keyword, page) {
 
 async function getEvents(query, page) {
   const data = await fetchEvents(query, page);
+
   if (data.totalHits !== 0) {
     if (page === 1) {
       Notify.success(`Hooray! We found ${data.totalHits} images`);
@@ -50,6 +52,9 @@ async function getEvents(query, page) {
     lightbox.refresh();
     observer.observe(refs.guard);
     page = pageToFetch += 1;
+    if (data.hits.length < imgPerPage) {
+      observer.unobserve(refs.guard);
+    }
   } else {
     Notify.failure(
       `Sorry, there are no images matching your search query "${query}". 
